@@ -15,6 +15,51 @@ data/clean/                        tables written by the notebook
 GEOL557_wrangling.pdf              PDF export from Nov 10 (may lag behind the notebook)
 ```
 
+## Getting the project
+
+You need [Git installed and set up](https://docs.github.com/en/get-started/git-basics/set-up-git). To push changes, you also need collaborator access to this repo (ask Amanda).
+
+### Option A: start fresh (simplest)
+
+If you don't have a copy of the project yet, [clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository):
+
+```bash
+git clone https://github.com/akelleyteng/geol557f26.git GEOL557_group_project
+cd GEOL557_group_project
+```
+
+### Option B: connect a folder you already have
+
+If you already have a copy of the project folder, for example from a shared drive, you can connect it to the repo without losing your local edits. Run these commands from inside the project folder:
+
+```bash
+git init -b main
+git remote add origin https://github.com/akelleyteng/geol557f26.git
+git fetch origin
+git reset origin/main                            # point at the repo's history; your files are not touched
+git branch --set-upstream-to=origin/main
+git ls-files --deleted -z | xargs -0 git restore --   # bring in any repo files your folder is missing
+git status
+```
+
+`git status` then shows how your folder differs from the repo:
+
+- `M`: a file you changed locally
+- `??`: a file that exists only in your folder
+
+Review those changes, then commit the ones you want to share and push them, or discard the rest with `git restore <file>`.
+
+### Day to day
+
+```bash
+git pull                                  # get teammates' changes
+git add <files>
+git commit -m "short description of the change"
+git push
+```
+
+New to Git or GitHub? Start with [About Git](https://docs.github.com/en/get-started/using-git/about-git) and the [Start your journey](https://docs.github.com/en/get-started/start-your-journey) tutorials.
+
 ## Setup
 
 Requires Python 3 and Jupyter. Tested with Python 3.14.7, pandas 2.3.3, numpy 2.5.3, matplotlib 3.11.2 and xlrd 2.0.2.
@@ -55,6 +100,6 @@ The current notebook does not read these files: `data/raw/antarctica2015co2compo
 
 ## Working together
 
-- Run `git pull` before you start editing.
+- Run `git pull` before you start editing (see Day to day above).
 - Notebooks are JSON, so two people editing the same notebook at once will produce merge conflicts that are hard to resolve. Agree who is editing before you start, or work in a separate notebook and merge the cells in afterwards.
 - Before committing, restart the kernel and run all cells so the saved outputs match the code.
