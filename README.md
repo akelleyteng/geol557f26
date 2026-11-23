@@ -10,6 +10,8 @@ The notebook loads the raw ice-core, instrumental, ENSO and volcanic records, cl
 
 ```
 notebook/GEOL557_wrangling.ipynb   the full workflow: raw data → cleaning → transformations → clean tables → plots
+notebook/magnifier.py              magnifier lens used by the interactive Figures 7 and 8
+notebook/test_magnifier.py         tests for magnifier.py
 data/raw/                          source files, as downloaded
 data/clean/                        tables written by the notebook
 GEOL557_wrangling.pdf              PDF export from Nov 10 (may lag behind the notebook)
@@ -62,15 +64,15 @@ New to Git or GitHub? Start with [About Git](https://docs.github.com/en/get-star
 
 ## Setup
 
-Requires Python 3 and Jupyter. Tested with Python 3.14.7, pandas 2.3.3, numpy 2.5.3, matplotlib 3.11.2 and xlrd 2.0.2.
+Requires Python 3 and Jupyter. Tested with Python 3.14.7, pandas 2.3.3, numpy 2.5.3, matplotlib 3.11.2, xlrd 2.0.2 and plotly 7.1.0.
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install pandas numpy matplotlib xlrd jupyter
+pip install pandas numpy matplotlib xlrd plotly jupyter
 ```
 
-`xlrd` is needed to read the `.xls` ice-core workbooks. Google Colab already has it.
+`xlrd` is needed to read the `.xls` ice-core workbooks. `plotly` draws the interactive figures. Google Colab already has both.
 
 ## Running
 
@@ -82,6 +84,12 @@ Running the notebook overwrites these two files in `data/clean/`:
 |---|---|
 | `deep_time_co2_temp.csv` | One row per ice-core CO2 sample (~801,000 yr BP to 1911 CE), with EPICA Dome C temperature interpolated onto each sample's age, plus glacial/interglacial and pre-industrial flags |
 | `modern_climate_1850_2025.csv` | One row per year, 1850–2025: temperature anomaly (rebased to 1850–1900), spliced CO2 and its radiative forcing, DJF Niño 3.4, volcanic aerosol optical depth, and catalog eruptions |
+
+### Interactive figures
+
+Figures 7 and 8 also have interactive versions, right after the static ones. A magnifier lens follows the cursor and shows a zoomed view next to it, while the main axes stay fixed. The lens needs a live notebook view (Jupyter, VS Code or Colab) and an internet connection, because it loads Plotly.js from a CDN. In JupyterLab, re-run the cell if the figure is blank after opening the notebook, because JupyterLab hides script output from notebooks it hasn't run. The PDF export shows a one-line note in place of each interactive figure; the static Figures 7 and 8 carry zoomed panels for the PDF.
+
+To test the lens helper, run `python -m pytest test_magnifier.py` from `notebook/`.
 
 ## Data sources
 
