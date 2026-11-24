@@ -5,8 +5,9 @@ so the usual correlation test, which treats every point as new information,
 overstates significance. These helpers replace the sample size with an
 effective sample size based on lag-1 autocorrelation (Bretherton et al.,
 1999, J. Climate 12, 1990-2009). An AR(1) model is the standard first-order
-correction. It does not capture longer memory, so the adjusted p-values are
-still optimistic rather than exact.
+correction, so the adjusted p-values are approximate. On the ice-core grid it
+gives a smaller effective sample than summing the full autocorrelation
+functions, and a slightly larger one than a phase-randomization test.
 """
 
 import numpy as np
@@ -40,3 +41,17 @@ def pearson_p_with_n(r, n_eff):
     df = n_eff - 2
     t = r * np.sqrt(df / (1 - r**2))
     return 2 * stats.t.sf(abs(t), df)
+
+
+def regression_variance_inflation(r1_x, r1_resid):
+    """How much autocorrelation inflates the variance of a fitted regression line.
+
+    Returns (mean_factor, slope_factor). The fitted mean's variance grows with
+    the residuals' lag-1 autocorrelation, and the slope's with the product of
+    the predictor's and the residuals' (Bayley and Hammersley, 1946). Multiply
+    the usual 1/n and (x - mean)^2 / Sxx terms by these factors.
+    """
+    product = r1_x * r1_resid
+    mean_factor = max(1.0, (1 + r1_resid) / (1 - r1_resid))
+    slope_factor = max(1.0, (1 + product) / (1 - product))
+    return mean_factor, slope_factor

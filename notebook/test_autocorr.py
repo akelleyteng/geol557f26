@@ -2,7 +2,12 @@ import numpy as np
 import pytest
 from scipy import stats
 
-from autocorr import effective_n_pair, lag1_autocorr, pearson_p_with_n
+from autocorr import (
+    effective_n_pair,
+    lag1_autocorr,
+    pearson_p_with_n,
+    regression_variance_inflation,
+)
 
 
 def ar1(phi, n, seed):
@@ -56,3 +61,14 @@ def test_should_give_a_larger_pearson_p_for_a_smaller_effective_sample():
 def test_should_reject_an_effective_sample_too_small_to_test():
     with pytest.raises(ValueError):
         pearson_p_with_n(0.5, 2)
+
+
+def test_should_not_inflate_regression_variance_without_autocorrelation():
+    assert regression_variance_inflation(0.0, 0.0) == pytest.approx((1.0, 1.0))
+
+
+def test_should_inflate_mean_by_residual_and_slope_by_product_autocorrelation():
+    mean_factor, slope_factor = regression_variance_inflation(0.9, 0.8)
+
+    assert mean_factor == pytest.approx(1.8 / 0.2)
+    assert slope_factor == pytest.approx(1.72 / 0.28)
