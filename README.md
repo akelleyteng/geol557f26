@@ -17,6 +17,7 @@ notebook/test_autocorr.py          tests for autocorr.py
 data/raw/                          source files, as downloaded
 data/clean/                        tables written by the notebook
 GEOL557_wrangling.pdf              PDF export from Nov 10 (may lag behind the notebook)
+notebook/GEOL557_stats.pdf         PDF export from Nov 23, including the Statistical Analysis section
 ```
 
 ## Getting the project
